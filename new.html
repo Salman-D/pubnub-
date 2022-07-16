@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Hello, PubNub</title>
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
+</head>
+<body>
+
+    <button onclick="unsubscribe()">unsubscribe</button>
+
+<script>
+
+function letsGo() {
+
+    pubnub = new PubNub({
+        publishKey: "pub-c-0bd702f0-1a53-4f5f-870e-f183d59825ed",
+        subscribeKey: "sub-c-571a76d0-b2a0-11e8-8381-2a6bb2abe11d",
+        uuid: "sec-c-MjAzM2U1YjQtZjBjNC00YjRhLTljY2MtNjMxOTMzNjM3Mzkx",
+    })
+
+    function publishSampleMessage() {
+        console.log("Publish to a channel 'hello_world'");
+        
+        var publishPayload = {
+            channel : "hello_world",
+            message: {
+                title: "P_title  : greeting",
+                description: "P_Description  : This is my first message!"
+            }
+        }
+        
+        pubnub.publish(publishPayload, function(status, response) {
+            console.log(status, response);
+        })
+        
+    }
+
+            
+    pubnub.addListener({
+        status: function(statusEvent) {
+            if (statusEvent.category === "PNConnectedCategory") {
+                publishSampleMessage();
+                console.log("conected to channel")
+            }
+            else if (statusEvent.category === "PNNetworkUpCategory") {
+                console.log("online")
+            }
+            else if (statusEvent.category === "PNNetworkDownCategory") {
+                console.log("offline")
+            }
+        },
+        message: function(msg) {
+            console.log(msg);
+            console.log(msg.message.description);
+        }
+    })
+
+
+    pubnub.subscribe({
+        channels: ["channel-b2b6bf85-93d9-4cfb-985a-22dre6a30bec"]
+    });
+
+    
+
+};
+
+letsGo()
+
+async function unsubscribe(){
+       await pubnub.unsubscribe({
+                channel: 'hello_world',
+            });
+            console.log("jkhjk")
+    }
+
+</script>
+
+
+</body>
+</html>

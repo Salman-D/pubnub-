@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var pubnub = new PubNub({
+        subscribeKey: "sub-c-94d96bcf-09b1-46f7-83b9-31e79c40bb94",
+        publishKey: "pub-c-6bcc849a-e515-49e7-8fbc-445ab7d81b0f",
+        uuid: "123",
+
+      });
+
+      async function publish() {
+        const result = await pubnub.publish({
+          channel: "hello_world",
+            message: {
+                title: "Client - > Title",
+                description: "Client - > Descriptions",
+            },
+        })
+        alert("Send to channel msg")
+      }
+
+      
+      pubnub.subscribe({
+        channels: ['hello_world']
+      });
+
+      async function unsubscribe(){
+        pubnub.unsubscribe({
+          channels: ['hello_world']
+        }), console.log("first")   
+      }
+
+    </script>
+    <button onclick="publish()">Click mee</button>
+    <button onclick="unsubscribe()">unsubscribe</button>
+  </body>
+</html>
